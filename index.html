@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GridBoard — 可拖拽响应式仪表盘</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="app-header">
+    <h1>GridBoard</h1>
+    <div class="toolbar">
+      <span id="breakpoint-badge" class="badge" title="当前断点"></span>
+      <button id="btn-add" type="button">＋ 添加卡片</button>
+      <button id="btn-reset" type="button">重置布局</button>
+    </div>
+  </header>
+
+  <main id="grid" class="grid" aria-label="可拖拽布局区域"></main>
+
+  <div id="toast-root" class="toast-root" aria-live="polite"></div>
+
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,200 @@
+:root {
+  --gap: 12px;
+  --row-h: 72px;
+  --bg: #0f1420;
+  --panel: #1a2233;
+  --panel-border: #2a3550;
+  --accent: #4f8cff;
+  --text: #e6ebf5;
+  --text-dim: #8b96ad;
+  --danger: #ff5c6c;
+  --ok: #34c98e;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+}
+
+.app-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--panel-border);
+  position: sticky;
+  top: 0;
+  background: var(--bg);
+  z-index: 10;
+}
+
+.app-header h1 { font-size: 18px; margin: 0; }
+
+.toolbar { display: flex; align-items: center; gap: 10px; }
+
+.badge {
+  font-size: 12px;
+  color: var(--text-dim);
+  border: 1px solid var(--panel-border);
+  border-radius: 999px;
+  padding: 3px 10px;
+}
+
+button {
+  background: var(--panel);
+  color: var(--text);
+  border: 1px solid var(--panel-border);
+  border-radius: 8px;
+  padding: 7px 14px;
+  font-size: 13px;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+}
+button:hover { border-color: var(--accent); }
+button:active { background: #223050; }
+
+/* ---- Grid ---- */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(var(--cols, 12), 1fr);
+  grid-auto-rows: var(--row-h);
+  gap: var(--gap);
+  padding: 20px;
+  position: relative;
+  align-content: start;
+}
+
+.widget {
+  background: var(--panel);
+  border: 1px solid var(--panel-border);
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  min-width: 0;
+  min-height: 0;
+  transition: box-shadow 0.15s;
+}
+
+.widget.dragging-source { opacity: 0.35; }
+
+.widget-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--panel-border);
+  cursor: grab;
+  user-select: none;
+  touch-action: none;
+}
+.widget-header:active { cursor: grabbing; }
+
+.widget-title { font-size: 13px; font-weight: 600; }
+
+.widget-remove {
+  border: none;
+  background: transparent;
+  color: var(--text-dim);
+  padding: 2px 6px;
+  font-size: 14px;
+  line-height: 1;
+}
+.widget-remove:hover { color: var(--danger); border: none; }
+
+.widget-body {
+  flex: 1;
+  padding: 10px 12px;
+  font-size: 13px;
+  color: var(--text-dim);
+  overflow: auto;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.widget-body .num {
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.resize-handle {
+  position: absolute;
+  right: 2px;
+  bottom: 2px;
+  width: 16px;
+  height: 16px;
+  cursor: nwse-resize;
+  touch-action: none;
+  border-right: 3px solid var(--text-dim);
+  border-bottom: 3px solid var(--text-dim);
+  border-bottom-right-radius: 6px;
+  opacity: 0.5;
+}
+.widget { position: relative; }
+.resize-handle:hover { opacity: 1; border-color: var(--accent); }
+
+/* 拖拽占位幽灵：仅用 transform 移动，不触发 reflow */
+.ghost {
+  position: absolute;
+  top: 0;
+  left: 0;
+  border: 2px dashed var(--accent);
+  border-radius: 12px;
+  background: rgba(79, 140, 255, 0.12);
+  pointer-events: none;
+  z-index: 5;
+  will-change: transform;
+}
+
+/* ---- Toast ---- */
+.toast-root {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  z-index: 100;
+  align-items: center;
+}
+
+.toast {
+  padding: 10px 18px;
+  border-radius: 8px;
+  font-size: 13px;
+  background: var(--panel);
+  border: 1px solid var(--panel-border);
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.4);
+  animation: toast-in 0.2s ease-out;
+  max-width: 80vw;
+}
+.toast.error { border-color: var(--danger); color: var(--danger); }
+.toast.success { border-color: var(--ok); color: var(--ok); }
+.toast.fade { opacity: 0; transition: opacity 0.3s; }
+
+@keyframes toast-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ---- 响应式 ---- */
+@media (max-width: 1199px) {
+  :root { --row-h: 64px; }
+}
+
+@media (max-width: 767px) {
+  :root { --gap: 8px; --row-h: 56px; }
+  .grid { padding: 12px; }
+  .app-header { padding: 10px 12px; }
+  .widget-body .num { font-size: 20px; }
+}
