@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>可拖拽仪表盘</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="toolbar">
+    <h1>可拖拽仪表盘</h1>
+    <div class="toolbar-actions">
+      <span id="save-status" class="save-status" role="status" aria-live="polite"></span>
+      <button id="btn-add" type="button">＋ 添加卡片</button>
+      <button id="btn-reset" type="button">重置布局</button>
+    </div>
+  </header>
+
+  <main id="grid" class="grid" aria-label="仪表盘布局区域"></main>
+
+  <div id="toast-root" class="toast-root" aria-live="assertive"></div>
+
+  <script src="js/db.js"></script>
+  <script src="js/layout.js"></script>
+  <script src="js/drag.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

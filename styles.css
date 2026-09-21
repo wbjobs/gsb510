@@ -1,0 +1,177 @@
+:root {
+  --cols: 12;
+  --row-h: 72px;
+  --gap: 12px;
+  --bg: #f4f6fa;
+  --card-bg: #ffffff;
+  --accent: #3b82f6;
+  --danger: #ef4444;
+  --text: #1f2937;
+  --muted: #6b7280;
+  --radius: 10px;
+  --shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  --shadow-drag: 0 12px 28px rgba(0, 0, 0, 0.22);
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+  background: var(--bg);
+  color: var(--text);
+}
+
+.toolbar {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding: 10px 16px;
+  background: var(--card-bg);
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.toolbar h1 { font-size: 16px; margin: 0; }
+
+.toolbar-actions { display: flex; align-items: center; gap: 8px; }
+
+.save-status { font-size: 12px; color: var(--muted); min-width: 64px; }
+.save-status.saving { color: var(--accent); }
+.save-status.error { color: var(--danger); }
+
+button {
+  padding: 6px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  background: #fff;
+  cursor: pointer;
+  font-size: 13px;
+}
+button:hover { border-color: var(--accent); color: var(--accent); }
+
+/* ---- CSS Grid 布局 ---- */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(var(--cols), 1fr);
+  grid-auto-rows: var(--row-h);
+  grid-auto-flow: row dense;
+  gap: var(--gap);
+  padding: 16px;
+  min-height: calc(100vh - 60px);
+}
+
+.widget {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  background: var(--card-bg);
+  border: 1px solid #e5e7eb;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+  /* 拖拽期间用 transform 移动，避免触发整页 reflow */
+  will-change: transform;
+  transition: box-shadow 0.15s ease;
+  touch-action: none; /* Pointer Events 拖拽必需 */
+}
+
+.widget-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 10px;
+  border-bottom: 1px solid #f0f1f3;
+  cursor: grab;
+  user-select: none;
+  -webkit-user-select: none;
+}
+.widget-header:active { cursor: grabbing; }
+.widget-title { font-size: 13px; font-weight: 600; }
+.widget-remove {
+  border: none;
+  background: none;
+  color: var(--muted);
+  padding: 2px 6px;
+  font-size: 14px;
+}
+.widget-remove:hover { color: var(--danger); }
+
+.widget-body {
+  flex: 1;
+  padding: 10px;
+  font-size: 13px;
+  color: var(--muted);
+  overflow: auto;
+}
+
+.widget-resize {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 18px;
+  height: 18px;
+  cursor: nwse-resize;
+  touch-action: none;
+  background: linear-gradient(135deg, transparent 50%, #cbd5e1 50%);
+  border-bottom-right-radius: var(--radius);
+}
+
+.widget.dragging {
+  z-index: 10;
+  box-shadow: var(--shadow-drag);
+  opacity: 0.92;
+  transition: none;
+}
+
+/* 拖拽落点占位提示 */
+.grid-placeholder {
+  border: 2px dashed var(--accent);
+  border-radius: var(--radius);
+  background: rgba(59, 130, 246, 0.08);
+  pointer-events: none;
+}
+
+/* ---- 响应式断点 ---- */
+@media (max-width: 1200px) { .grid { --cols: 8; } }
+@media (max-width: 900px)  { .grid { --cols: 6; } }
+@media (max-width: 640px)  {
+  .grid { --cols: 4; --row-h: 64px; --gap: 8px; padding: 8px; }
+  .toolbar h1 { font-size: 14px; }
+}
+
+/* ---- Toast 异常提示 ---- */
+.toast-root {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  z-index: 100;
+  pointer-events: none;
+}
+
+.toast {
+  padding: 10px 16px;
+  border-radius: 8px;
+  color: #fff;
+  font-size: 13px;
+  box-shadow: var(--shadow-drag);
+  animation: toast-in 0.2s ease;
+  max-width: min(90vw, 420px);
+}
+.toast.error { background: var(--danger); }
+.toast.info  { background: #374151; }
+.toast.success { background: #16a34a; }
+.toast.fade { opacity: 0; transition: opacity 0.3s ease; }
+
+@keyframes toast-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
